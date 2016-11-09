@@ -1,0 +1,71 @@
+package main
+
+import (
+	"github.com/CloudWise-OpenSource/GoCrab/Libs/goavro"
+	"bytes"
+	//"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+)
+
+func main() {
+	recordSchemaJSON := `
+{
+  "type": "record",
+  "name": "comments",
+  "doc:": "A basic schema for storing blog comments",
+  "namespace": "com.example",
+  "fields": [
+    {
+      "doc": "Name of user",
+      "type": "string",
+      "name": "username"
+    },
+    {
+      "doc": "The content of the user's message",
+      "type": "string",
+      "name": "comment"
+    },
+    {
+      "doc": "Unix epoch time in milliseconds",
+      "type": "long",
+      "name": "timestamp"
+    }
+  ]
+}
+`
+	someRecord, err := goavro.NewRecord(goavro.RecordSchema(recordSchemaJSON))
+	if err != nil {
+		log.Fatal(err)
+	}
+	// identify field name to set datum for
+	someRecord.Set("username", "Aquaman")
+	someRecord.Set("comment", "The Atlantic is oddly cold this morning!")
+	someRecord.Set("timestamp", int64(1082196484))
+
+	codec, err := goavro.NewCodec(recordSchemaJSON)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	bb := new(bytes.Buffer)
+	if err = codec.Encode(bb, someRecord); err != nil {
+		log.Fatal(err)
+	}
+
+	//actual := bb.Bytes()
+
+	bf := bytes.NewBuffer(bb.Bytes())
+	body := ioutil.NopCloser(bf)
+
+	client := &http.Client{}
+	req, _ := http.NewRequest("POST", "http://127.0.0.1:26789/send", body)
+
+	req.Header.Set("Content-Type", "text/plain;charset=utf-8")
+	//req.Header.Set("Content-Encoding", "gzip")
+	req.Header.Set("Transfer-Encoding", "chunked")
+
+	resp, err := client.Do(req)
+	defer resp.Body.Close()
+}
