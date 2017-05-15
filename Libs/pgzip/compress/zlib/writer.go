@@ -10,7 +10,7 @@ import (
 	"hash/adler32"
 	"io"
 
-	"github.com/CloudWise-OpenSource/GoCrab/pgzip/compress/flate"
+	"github.com/CloudWise-OpenSource/GoCrab/Libs/pgzip/compress/flate"
 )
 
 // These constants are copied from the flate package, so that code that imports

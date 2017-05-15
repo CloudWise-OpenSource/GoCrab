@@ -9,8 +9,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/CloudWise-OpenSource/GoCrab/pgzip/compress/flate"
-	"github.com/CloudWise-OpenSource/GoCrab/pgzip/crc32"
+	"github.com/CloudWise-OpenSource/GoCrab/Libs/pgzip/compress/flate"
+	"github.com/CloudWise-OpenSource/GoCrab/Libs/pgzip/crc32"
 )
 
 // These constants are copied from the flate package, so that code that imports

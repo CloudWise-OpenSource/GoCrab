@@ -10,7 +10,7 @@ import (
 	"io/ioutil"
 	"sync"
 
-	"github.com/CloudWise-OpenSource/GoCrab/pgzip/compress/flate"
+	"github.com/CloudWise-OpenSource/GoCrab/Libs/pgzip/compress/flate"
 )
 
 // A Compressor returns a compressing writer, writing to the

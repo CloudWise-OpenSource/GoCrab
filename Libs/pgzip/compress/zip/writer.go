@@ -11,7 +11,7 @@ import (
 	"hash"
 	"io"
 
-	"github.com/CloudWise-OpenSource/GoCrab/pgzip/crc32"
+	"github.com/CloudWise-OpenSource/GoCrab/Libs/pgzip/crc32"
 )
 
 // TODO(adg): support zip file comments

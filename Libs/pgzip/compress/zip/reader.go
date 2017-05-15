@@ -13,7 +13,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/CloudWise-OpenSource/GoCrab/pgzip/crc32"
+	"github.com/CloudWise-OpenSource/GoCrab/Libs/pgzip/crc32"
 )
 
 var (

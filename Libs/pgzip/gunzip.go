@@ -22,8 +22,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/CloudWise-OpenSource/GoCrab/pgzip/compress/flate"
-	"github.com/CloudWise-OpenSource/GoCrab/pgzip/crc32"
+	"github.com/CloudWise-OpenSource/GoCrab/Libs/pgzip/compress/flate"
+	"github.com/CloudWise-OpenSource/GoCrab/Libs/pgzip/crc32"
 )
 
 const (

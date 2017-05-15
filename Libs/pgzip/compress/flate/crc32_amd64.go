@@ -6,7 +6,7 @@
 package flate
 
 import (
-	"github.com/CloudWise-OpenSource/GoCrab/pgzip/cpuid"
+	"github.com/CloudWise-OpenSource/GoCrab/Libs/pgzip/cpuid"
 )
 
 // crc32sse returns a hash for the first 4 bytes of the slice
