@@ -1,7 +1,3 @@
-## logs
-logs is a Go logs manager. It can use many logs adapters. The repo is inspired by `database/sql` .
-
-
 ## How to install?
 
 	go get github.com/CloudWise-OpenSource/GoCrab/Core/logs
