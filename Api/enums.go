@@ -12,3 +12,9 @@ const VERSION = Core.VERSION
 
 const RUNMODE_DEV = Core.RUNMODE_DEV
 const RUNMODE_PROD = Core.RUNMODE_PROD
+
+const REST_SUCCESS_CODE = 1000
+const REST_SUCCESS_MSG = "ok"
+
+const REST_FAILD_CODE = 999
+const REST_FAILD_MSG = "faild"

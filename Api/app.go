@@ -8,13 +8,12 @@ package GoCrab
 
 import (
 	"fmt"
+	"github.com/CloudWise-OpenSource/GoCrab/Helpers"
 	"net"
 	"net/http"
 	"net/http/fcgi"
 	"os"
 	"time"
-
-	"github.com/CloudWise-OpenSource/GoCrab/Helpers"
 )
 
 // App defines GoCrab application with a new PatternServeMux.

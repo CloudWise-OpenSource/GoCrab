@@ -170,7 +170,7 @@ func init() {
 		if Helpers.FileExists(AppConfigPath) {
 			os.Chdir(AppPath)
 		} else {
-			AppConfigPath = filepath.Join(workPath, "conf", "app.inin")
+			AppConfigPath = filepath.Join(workPath, "conf", "app.ini")
 		}
 	}
 	AppConfigProvider = "ini"
@@ -218,7 +218,7 @@ func init() {
 
 	ErrorsShow = true
 
-	GoCrabServerName = "GoCrab:" + VERSION
+	GoCrabServerName = "GoCrab/" + VERSION
 
 	RouterCaseSensitive = true
 

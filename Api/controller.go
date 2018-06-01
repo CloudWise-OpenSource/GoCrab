@@ -173,68 +173,7 @@ func (c *Controller) RenderString() (string, error) {
 
 // RenderBytes returns the bytes of rendered template string. Do not send out response.
 func (c *Controller) RenderBytes() ([]byte, error) {
-	//if the controller has set layout, then first get the tplname's content set the content to the layout
-
 	return nil, nil
-
-	//if c.Layout != "" {
-	//	if c.TplNames == "" {
-	//		c.TplNames = strings.ToLower(c.controllerName) + "/" + strings.ToLower(c.actionName) + "." + c.TplExt
-	//	}
-	//	newbytes := bytes.NewBufferString("")
-	//	if _, ok := Templates[c.TplNames]; !ok {
-	//		panic("can't find templatefile in the path:" + c.TplNames)
-	//	}
-	//	err := Templates[c.TplNames].ExecuteTemplate(newbytes, c.TplNames, c.Data)
-	//	if err != nil {
-	//		Trace("template Execute err:", err)
-	//		return nil, err
-	//	}
-	//	tplcontent, _ := ioutil.ReadAll(newbytes)
-	//	c.Data["LayoutContent"] = template.HTML(string(tplcontent))
-
-	//	if c.LayoutSections != nil {
-	//		for sectionName, sectionTpl := range c.LayoutSections {
-	//			if sectionTpl == "" {
-	//				c.Data[sectionName] = ""
-	//				continue
-	//			}
-
-	//			sectionBytes := bytes.NewBufferString("")
-	//			err = Templates[sectionTpl].ExecuteTemplate(sectionBytes, sectionTpl, c.Data)
-	//			if err != nil {
-	//				Trace("template Execute err:", err)
-	//				return nil, err
-	//			}
-	//			sectionContent, _ := ioutil.ReadAll(sectionBytes)
-	//			c.Data[sectionName] = template.HTML(string(sectionContent))
-	//		}
-	//	}
-
-	//	ibytes := bytes.NewBufferString("")
-	//	err = Templates[c.Layout].ExecuteTemplate(ibytes, c.Layout, c.Data)
-	//	if err != nil {
-	//		Trace("template Execute err:", err)
-	//		return nil, err
-	//	}
-	//	icontent, _ := ioutil.ReadAll(ibytes)
-	//	return icontent, nil
-	//} else {
-	//	if c.TplNames == "" {
-	//		c.TplNames = strings.ToLower(c.controllerName) + "/" + strings.ToLower(c.actionName) + "." + c.TplExt
-	//	}
-	//	ibytes := bytes.NewBufferString("")
-	//	if _, ok := Templates[c.TplNames]; !ok {
-	//		panic("can't find templatefile in the path:" + c.TplNames)
-	//	}
-	//	err := Templates[c.TplNames].ExecuteTemplate(ibytes, c.TplNames, c.Data)
-	//	if err != nil {
-	//		Trace("template Execute err:", err)
-	//		return nil, err
-	//	}
-	//	icontent, _ := ioutil.ReadAll(ibytes)
-	//	return icontent, nil
-	//}
 }
 
 // Redirect sends the redirection response to url with status code.
@@ -275,6 +214,71 @@ func (c *Controller) UrlFor(endpoint string, values ...interface{}) string {
 	return ""
 }
 
+func (c *Controller) setServerHead() {
+	c.Ctx.Output.Header("Server", GoCrabServerName)
+}
+
+func (c *Controller) RESTJson(code int, message string, data interface{}) {
+	c.setServerHead()
+	tmp := make(map[string]interface{})
+	tmp["Code"] = code
+	tmp["Message"] = message
+	tmp["data"] = data
+
+	tmp["Data"] = data
+	c.Ctx.Output.Json(tmp, false, false)
+}
+
+func (c *Controller) RESTSuccess(data interface{}, message interface{}) {
+	c.setServerHead()
+
+	tmp := make(map[string]interface{})
+	tmp["Code"] = REST_SUCCESS_CODE
+
+	if message != nil {
+		tmp["Message"] = message.(string)
+	} else {
+		tmp["Message"] = REST_SUCCESS_MSG
+	}
+
+	tmp["Data"] = data
+
+	c.Ctx.Output.Json(tmp, false, false)
+}
+
+func (c *Controller) RESTFaild(data interface{}, message interface{}) {
+	c.setServerHead()
+
+	tmp := make(map[string]interface{})
+	tmp["Code"] = REST_FAILD_CODE
+
+	if message != nil {
+		tmp["Message"] = message.(string)
+	} else {
+		tmp["Message"] = REST_FAILD_MSG
+	}
+
+	tmp["Data"] = data
+
+	c.Ctx.Output.Json(tmp, false, false)
+}
+
+func (c *Controller) RESTHeadSuccess() {
+	c.Ctx.ResponseWriter.WriteHeader(200)
+}
+
+func (c *Controller) RESTHeadNoContent() {
+	c.Ctx.ResponseWriter.WriteHeader(204)
+}
+
+func (c *Controller) RESTHeadNotFound() {
+	c.Ctx.ResponseWriter.WriteHeader(404)
+}
+
+func (c *Controller) RESTHeadCode(code int) {
+	c.Ctx.ResponseWriter.WriteHeader(code)
+}
+
 // ServeJson sends a json response with encoding charset.
 func (c *Controller) ServeJson(encoding ...bool) {
 	var hasIndent bool
@@ -287,12 +291,14 @@ func (c *Controller) ServeJson(encoding ...bool) {
 	if len(encoding) > 0 && encoding[0] == true {
 		hasencoding = true
 	}
+	c.setServerHead()
 	c.Ctx.Output.Json(c.Data["json"], hasIndent, hasencoding)
 }
 
 //ServeString sends a string response.
 func (c *Controller) ServeString(data []byte) {
 	c.Ctx.Output.Header("Content-Type", "text/html; charset=utf-8")
+	c.setServerHead()
 	c.Ctx.Output.Body(data)
 }
 
@@ -304,6 +310,7 @@ func (c *Controller) ServeJsonp() {
 	} else {
 		hasIndent = true
 	}
+	c.setServerHead()
 	c.Ctx.Output.Jsonp(c.Data["jsonp"], hasIndent)
 }
 
@@ -315,6 +322,7 @@ func (c *Controller) ServeXml() {
 	} else {
 		hasIndent = true
 	}
+	c.setServerHead()
 	c.Ctx.Output.Xml(c.Data["xml"], hasIndent)
 }
 
