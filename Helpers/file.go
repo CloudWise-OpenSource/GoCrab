@@ -36,6 +36,15 @@ func FileExists(name string) bool {
 	return true
 }
 
+//MakeDir will make a directory.
+func MakeDir(name string) (bool, error) {
+	if err := os.Mkdir(name, os.ModePerm); err != nil {
+		return false, err
+	} else {
+		return true, nil
+	}
+}
+
 // Search a file in paths.
 // this is often used in search config file in /etc ~/
 func SearchFile(filename string, paths ...string) (fullpath string, err error) {
